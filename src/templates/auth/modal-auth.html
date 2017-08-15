@@ -40,8 +40,7 @@
 				</div>
 			</div>
 		</div>
-		<div ng-if="auth[tab].type=='oauth2'">
-			<p>Not yet supported :(</p>
+		<div ng-if="auth[tab].type=='oauth2'">			
 			<p swagger-translate="authOAuthDesc"></p>
 			<div class="form-group" ng-if="auth[tab].authorizationUrl">
 				<label class="control-label col-xs-3" swagger-translate="authAuthorizationUrl"></label>
@@ -69,8 +68,7 @@
 							<input type="checkbox"
 								id="hidden" 
 								name="hidden" 
-								ng-model="form.scopes[name]"
-								disabled>
+								ng-model="form.scopes[name]">
 							<span ng-bind="name"></span>
 						</label>
 						<div class="scope-desc" ng-bind="desc"></div>
@@ -79,8 +77,8 @@
 			</div>
 		</div>
 		<div class="form-group buttons">
-			<button class="btn btn-default" type="button" ng-click="$close()" swagger-translate="authCancel"></button>
-			<button class="btn btn-primary" type="submit" swagger-translate="authAuthorize" ng-disabled="auth[tab].type=='oauth2'"></button>
+			<button class="btn btn-primary" type="submit" swagger-translate="authAuthorize"></button>
+			<button class="btn btn-default" type="button" ng-click="$close()" swagger-translate="authCancel"></button>			
 		</div>
 	</form>
 </div>

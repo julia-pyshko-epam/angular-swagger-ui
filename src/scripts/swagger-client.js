@@ -103,6 +103,9 @@ angular
 						break;
 					case 'basic':
 						headers.Authorization = 'Basic ' + btoa(authParams.login + ':' + authParams.password);
+						break;	
+					case 'oauth2':
+						headers.Authorization = 'Bearer ' + authParams.bearer;
 						break;
 				}
 			}

@@ -6,6 +6,11 @@
  */
 'use strict';
 
+window.swaggerOAuth = window.swaggerOAuth || {};
+window.swaggerOAuth.credentials = window.swaggerOAuth.credentials || {};
+window.swaggerOAuth.credentials.appKey = window.swaggerOAuth.credentials.appKey || 'EDJAGUKCeoTsG7BGJe17e0vFlRrl9ViQ';
+window.swaggerOAuth.credentials.appSecret = window.swaggerOAuth.credentials.appSecret || '10wl1cqd24StP2pN';
+
 angular
 	.module('swaggerUiAuthorization', ['swaggerUi', 'ui.bootstrap.modal'])
 	.service('swaggerUiAuth', function($q, $uibModal) {
@@ -40,11 +45,21 @@ angular
 		};
 
 	})
-	.controller('SwaggerUiModalAuthCtrl', function($scope, operation, auth) {
+	.controller('SwaggerUiModalAuthCtrl', function($scope, operation, auth, $http) {
 
 		$scope.form = {};
 		$scope.auth = auth;
 		$scope.tab = 0;
+
+		$scope.onCodeReceived = null;
+
+		window.addEventListener("message", function(receivedMessage){
+			var oauthCode = receivedMessage.data;
+			console.log('[OAUTH20] OAuth %s code has been received', oauthCode);
+			if($scope.onCodeReceived){
+				$scope.onCodeReceived(oauthCode);
+			}
+		}, false);
 
 		var authParams = operation.authParams || auth[0];
 
@@ -56,6 +71,8 @@ angular
 				case 'basic':
 					$scope.form.basicLogin = authParams.login;
 					$scope.form.basicPassword = authParams.password;
+					break;
+				case 'oauth2':
 					break;
 			}
 		}
@@ -72,6 +89,9 @@ angular
 					} else {
 						delete operation.authParams;
 					}
+
+					auth[$scope.tab].valid = valid;
+					$scope.$close();
 					break;
 				case 'basic':
 					if ($scope.form.basicLogin === '' && $scope.form.basicPassword === '') {
@@ -81,10 +101,39 @@ angular
 						authParams.password = $scope.form.basicPassword;
 						valid = true;
 					}
+
+					auth[$scope.tab].valid = valid;
+					$scope.$close();
+					break;
+				case 'oauth2':
+					var authUrl = authParams.authorizationUrl + '?response_type=code&client_id=' + swaggerOAuth.credentials.appKey + '&scope=readwrite';
+				 	var oauthWindow = window.open(authUrl, "OAuth", "width=600,height=600");
+					$scope.$close();
+
+					$scope.onCodeReceived = function(oauthCode){
+						var config = {
+							headers: {
+								'Content-Type': 'application/x-www-form-urlencoded',
+								'Authorization': 'Basic ' + btoa(window.swaggerOAuth.credentials.appKey + ':' + window.swaggerOAuth.credentials.appSecret)
+							}
+						}
+						var body = 'grant_type=authorization_code&response_type=code&code=' + oauthCode;
+
+						$http.post(authParams.tokenUrl, body, config).then(function(response) {
+								var oauthData = response.data;
+								auth[$scope.tab].valid = true;
+								authParams.bearer = oauthData.access_token;
+								console.log('[OAUTH20] Bearer token has been set to %s', authParams.bearer);
+
+								$scope.onCodeReceived = null;
+							}, function(response) {
+								$scope.$close();
+						});
+					};
+
+					$scope.$close();
 					break;
 			}
-			auth[$scope.tab].valid = valid;
-			$scope.$close();
 		};
 
 		$scope.setTab = function(index) {

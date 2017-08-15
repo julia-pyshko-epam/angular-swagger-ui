@@ -79,7 +79,7 @@
             .controller('MyCtrl', function($scope, swaggerTranslator) {
                 // init form
                 $scope.isLoading = false;
-                $scope.url = $scope.swaggerUrl = 'http://petstore.swagger.io/v2/swagger.json';
+                $scope.url = $scope.swaggerUrl = 'http://docs.axway.com/api_documentation/syncplicity/1.0.0/syncplicity-us-swagger.json';
                 // error management
                 $scope.myErrorHandler = function(message, code){
                     alert(swaggerTranslator.translate('error', {
