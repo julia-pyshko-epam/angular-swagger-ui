@@ -106,7 +106,15 @@ angular
 					$scope.$close();
 					break;
 				case 'oauth2':
-					var authUrl = authParams.authorizationUrl + '?response_type=code&client_id=' + swaggerOAuth.credentials.appKey + '&scope=readwrite';
+					var scopes = ''
+					for (var scope in $scope.form.scopes) {
+						scopes += scope + ','
+					}
+
+					if (scopes.length > 0)
+						scopes = scopes.substring(0, scopes.length - 1);
+
+					var authUrl = authParams.authorizationUrl + '?response_type=code&client_id=' + swaggerOAuth.credentials.appKey + '&scope=' + scopes;
 				 	var oauthWindow = window.open(authUrl, "OAuth", "width=600,height=600");
 					$scope.$close();
 
