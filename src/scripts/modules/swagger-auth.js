@@ -57,8 +57,7 @@ angular
 			var oauthCode = receivedMessage.data;
 			console.log('[OAUTH20] OAuth %s code has been received', oauthCode);
 			if($scope.onCodeReceived){
-				$scope.onCodeReceived(oauthCode);
-				$scope.onCodeReceived = null;
+				$scope.onCodeReceived(oauthCode);				
 			}
 		}, false);
 

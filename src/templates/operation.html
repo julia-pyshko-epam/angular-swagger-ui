@@ -12,10 +12,10 @@
 	<div ng-if="op.description">
 		<h5 swagger-translate="operationImplementationNotes"></h5>
 		<p ng-bind-html="op.description"></p>
-    </div>
+    </div>	
     <div ng-if="op.externalDocs">
         <h5 swagger-translate="externalDocs"></h5>
-        <span ng-bind-html="op.externalDocs.description"></span>
+        <span ng-bind-html="op.externalDocs.description"></span>		
         <a target="_blank" ng-href="{{op.externalDocs.url}}" ng-bind="op.externalDocs.url"></span></a>
     </div>
     <button ng-if="op.security.length>0" ng-click="auth(op)" class="auth-required" ng-class="{valid:authValid(op)}" title="{{'authRequired'|swaggerTranslate}}">!</button>
@@ -85,9 +85,9 @@
     				<tr ng-repeat="(code,resp) in op.responses track by $index" ng-include="'templates/response.html'" class="operation-response" ng-class="resp.css"></tr>
     			</tbody>
     		</table>
-    	</div>
+    	</div>		
     	<div ng-if="apiExplorer">
-    		<button class="btn btn-default" ng-click="op.explorerResult=false;op.hideExplorerResult=false" type="submit" ng-disabled="op.loading" ng-bind="op.loading?'explorerLoading':'explorerTryIt'|swaggerTranslate"></button>
+    		<button class="btn btn-default" ng-click="op.explorerResult=false;op.hideExplorerResult=false" type="submit" ng-disabled="op.loading || (op.security.length > 0 && !authValid(op))" ng-bind="op.loading?'explorerLoading':'explorerTryIt'|swaggerTranslate"></button>
         	<a class="hide-try-it" ng-if="op.explorerResult&&!op.hideExplorerResult" ng-click="op.hideExplorerResult=true" swagger-translate="responseHide"></a>
     	</div>
 	</form>
