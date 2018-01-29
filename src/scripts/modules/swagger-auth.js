@@ -53,13 +53,11 @@ angular
 
 		$scope.onCodeReceived = null;
 
-		window.addEventListener("message", function(receivedMessage){
-			var oauthCode = receivedMessage.data;
-			console.log('[OAUTH20] OAuth %s code has been received', oauthCode);
+		window.swaggerOAuth.codeReceived = window.swaggerOAuth.codeReceived || (function(code){
 			if($scope.onCodeReceived){
-				$scope.onCodeReceived(oauthCode);				
+				$scope.onCodeReceived(oauthCode);
 			}
-		}, false);
+		});	
 
 		var authParams = operation.authParams || auth[0];
 
