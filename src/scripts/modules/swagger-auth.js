@@ -55,7 +55,7 @@ angular
 
 		window.swaggerOAuth.codeReceived = window.swaggerOAuth.codeReceived || (function(code){
 			if($scope.onCodeReceived){
-				$scope.onCodeReceived(oauthCode);
+				$scope.onCodeReceived(code);
 			}
 		});	
 
