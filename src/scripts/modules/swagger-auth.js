@@ -42,13 +42,18 @@ angular
 		};
 
 	})
-	.controller('SwaggerUiModalAuthCtrl', function($scope, operation, auth, $http) {
+	.controller('SwaggerUiModalAuthCtrl', function($scope, $rootScope, operation, auth, $http) {
 
 		$scope.form = {};
 		$scope.auth = auth;
 		$scope.tab = 0;
 
-		$scope.onTokenReceived = null;
+		$scope.onTokenReceived = function(token) {			
+			auth[$scope.tab].valid = true;
+			authParams.bearer = token;			
+			$scope.$close();			
+			$rootScope.$apply();
+		};	
 
 		window.swaggerOAuth.tokenReceived = window.swaggerOAuth.tokenReceived || (function(token){
 			if($scope.onTokenReceived){
@@ -110,17 +115,6 @@ angular
 						scopes = scopes.substring(0, scopes.length - 1);
 					
 				 	var oauthWindow = window.open(window.swaggerOAuth.authorizeUrl, "OAuth", "width=600,height=700");
-					$scope.$close();
-
-					$scope.onTokenReceived = function(token) {
-						console.log('oauth token has been received')
-						auth[$scope.tab].valid = true;
-						authParams.bearer = token;
-						$scope.onTokenReceived = null;
-						$scope.$close();
-						$scope.$apply();						
-					};
-
 					$scope.$close();
 					break;
 			}
