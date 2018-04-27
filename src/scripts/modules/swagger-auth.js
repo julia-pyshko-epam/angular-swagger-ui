@@ -7,9 +7,6 @@
 'use strict';
 
 window.swaggerOAuth = window.swaggerOAuth || {};
-window.swaggerOAuth.credentials = window.swaggerOAuth.credentials || {};
-window.swaggerOAuth.credentials.appKey = window.swaggerOAuth.credentials.appKey || 'EDJAGUKCeoTsG7BGJe17e0vFlRrl9ViQ';
-window.swaggerOAuth.credentials.appSecret = window.swaggerOAuth.credentials.appSecret || '10wl1cqd24StP2pN';
 
 angular
 	.module('swaggerUiAuthorization', ['swaggerUi', 'ui.bootstrap.modal'])
@@ -51,11 +48,11 @@ angular
 		$scope.auth = auth;
 		$scope.tab = 0;
 
-		$scope.onCodeReceived = null;
+		$scope.onTokenReceived = null;
 
-		window.swaggerOAuth.codeReceived = window.swaggerOAuth.codeReceived || (function(code){
-			if($scope.onCodeReceived){
-				$scope.onCodeReceived(code);
+		window.swaggerOAuth.tokenReceived = window.swaggerOAuth.tokenReceived || (function(token){
+			if($scope.onTokenReceived){
+				$scope.onTokenReceived(token);
 			}
 		});	
 
@@ -111,30 +108,17 @@ angular
 
 					if (scopes.length > 0)
 						scopes = scopes.substring(0, scopes.length - 1);
-
-					var authUrl = authParams.authorizationUrl + '?response_type=code&client_id=' + swaggerOAuth.credentials.appKey + '&scope=' + scopes;
-				 	var oauthWindow = window.open(authUrl, "OAuth", "width=600,height=600");
+					
+				 	var oauthWindow = window.open(window.swaggerOAuth.authorizeUrl, "OAuth", "width=600,height=700");
 					$scope.$close();
 
-					$scope.onCodeReceived = function(oauthCode){
-						var config = {
-							headers: {
-								'Content-Type': 'application/x-www-form-urlencoded',
-								'Authorization': 'Basic ' + btoa(window.swaggerOAuth.credentials.appKey + ':' + window.swaggerOAuth.credentials.appSecret)
-							}
-						}
-						var body = 'grant_type=authorization_code&response_type=code&code=' + oauthCode;
-
-						$http.post(authParams.tokenUrl, body, config).then(function(response) {
-								var oauthData = response.data;
-								auth[$scope.tab].valid = true;
-								authParams.bearer = oauthData.access_token;
-								console.log('[OAUTH20] Bearer token has been set to %s', authParams.bearer);
-
-								$scope.onCodeReceived = null;
-							}, function(response) {
-								$scope.$close();
-						});
+					$scope.onTokenReceived = function(token) {
+						console.log('oauth token has been received')
+						auth[$scope.tab].valid = true;
+						authParams.bearer = token;
+						$scope.onTokenReceived = null;
+						$scope.$close();
+						$scope.$apply();						
 					};
 
 					$scope.$close();

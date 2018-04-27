@@ -69,6 +69,14 @@ angular
 			schema = resolveAllOf(swagger, schema);
 			if (schema.default || schema.example) {
 				sample = schema.default || schema.example;
+				try{
+					sample = JSON.parse(sample);
+				}
+				catch(e){
+					console.log('Invalid JSON object ' + sample);
+				}
+				
+				
 			} else if (schema.properties) {
 				sample = {};
 				for (name in schema.properties) {

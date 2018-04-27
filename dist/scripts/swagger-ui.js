@@ -544,6 +544,14 @@ angular
 			schema = resolveAllOf(swagger, schema);
 			if (schema.default || schema.example) {
 				sample = schema.default || schema.example;
+				try{
+					sample = JSON.parse(sample);
+				}
+				catch(e){
+					console.log('Invalid JSON object ' + sample);
+				}
+				
+				
 			} else if (schema.properties) {
 				sample = {};
 				for (name in schema.properties) {
@@ -1193,7 +1201,15 @@ angular
 					response.description = trustHtml(response.description);
 					if (response.schema) {
 						if (response.examples && response.examples[operation.produces[0]]) {
-							sampleJson = angular.toJson(response.examples[operation.produces[0]], true);
+							var exampleJson = response.examples[operation.produces[0]];
+							try{
+								sampleJson = angular.toJson(JSON.parse(exampleJson), true);								
+							}
+							catch (e){
+								sampleJson = angular.toJson(exampleJson, true);								
+								console.error('Invalid Example JSON ' + exampleJson);
+							}
+							
 						} else {
 							sampleJson = swaggerModel.generateSampleJson(swagger, response.schema);
 						}
