@@ -47,6 +47,9 @@ angular
 		$scope.form = {};
 		$scope.auth = auth;
 		$scope.tab = 0;
+		if (window.swaggerOAuth.interactiveDocAppKey) 
+			$scope.InteractiveDocAppKey = window.swaggerOAuth.interactiveDocAppKey;
+		else $scope.InteractiveDocAppKey = '<ask support for interactive docs key>';
 
 		$scope.onTokenReceived = function(token) {			
 			auth[$scope.tab].valid = true;
