@@ -71,7 +71,7 @@ angular
 				basic: 'Basic authorization',
 				authLogin: 'Login',
 				authPassword: 'Password',
-				oauth2: 'oAuth2 authorization',
+				oauth2: 'OAuth2 authorization',
 				authOAuthDesc: 'Making Syncplicity API requests requires you to grant access to this app. You will be directed to Syncplicity web site to approve the use of your credentials and then returned to this page. You can revoke these permissions at any time.',
 				oauthNoteTitle: 'Note',
 				oauthNoteBodyBeforeLink: 'if your company has enabled Application Whitelisting feature, you should also whitelist this application as described in ',
