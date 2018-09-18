@@ -71,7 +71,7 @@ angular
 				basic: 'Basic authorization',
 				authLogin: 'Login',
 				authPassword: 'Password',
-				oauth2: 'OAuth2 authorization',
+				oauth2: 'oAuth2 authorization',
 				authOAuthDesc: 'Scopes are used to grant an application different levels of access to data on behalf of the end user. Each API may declare one or more scopes. API requires the following scopes. Select which ones you want to grant.',
 				authAuthorizationUrl: 'Authorization URL',
 				authFlow: 'Flow',

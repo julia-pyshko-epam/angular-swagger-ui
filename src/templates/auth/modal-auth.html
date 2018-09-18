@@ -2,7 +2,7 @@
 	<h2 swagger-translate="authAvailable"></h2>
 	<ul class="list-inline">
 		<li ng-repeat="item in auth" ng-class="{active:tab==$index}">
-			<span ng-bind="item.type|swaggerTranslate"></a>
+			<a ng-click="setTab($index)" ng-bind="item.type|swaggerTranslate"></a>
 		</li>
 	</ul>
 	<form role="form" name="authForm" class="form-horizontal" ng-submit="authForm.$valid&&authorize()" autocomplete="off">
@@ -41,7 +41,14 @@
 			</div>
 		</div>
 		<div ng-if="auth[tab].type=='oauth2'">			
-			<p swagger-translate="authOAuthDesc"></p>			
+			<p swagger-translate="authOAuthDesc"></p>
+			<div>
+				<strong swagger-translate="oauthNoteTitle"></strong>
+				<span swagger-translate="oauthNoteBodyBeforeLink"></span>
+				<a href="https://syncplicity.zendesk.com/hc/en-us/articles/360001388191-Application-Whitelisting-and-Scopes"><span swagger-translate="oauthNoteLinkTitle"></span></a>
+				<span swagger-translate="oauthNoteBodyAfterLink"></span>
+				<span>{{InteractiveDocAppKey}}</span>
+			</div>
 			
 			<div class="form-group" ng-if="auth[tab].authorizationUrl">
 				<label class="control-label col-xs-3" swagger-translate="authAuthorizationUrl"></label>
@@ -79,7 +86,7 @@
 		</div>
 		<div class="form-group buttons">
 			<button class="btn btn-primary" type="submit" swagger-translate="authAuthorize"></button>
-			<button class="btn btn-default btn-square" type="button" ng-click="$close()" swagger-translate="authCancel"></button>			
+			<button class="btn btn-default" type="button" ng-click="$close()" swagger-translate="authCancel"></button>			
 		</div>
 	</form>
 </div>
